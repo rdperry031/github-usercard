@@ -3,8 +3,20 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+import axios from 'axios';
 
-/*
+axios.get(`https://api.github.com/users/rdperry031`)
+  .then(res => {
+    console.log(res.data)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally(() => {
+    console.log('done')
+  })
+
+  /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
     data in order to use it to build your component function
@@ -28,7 +40,9 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['Raj-04','Jie-chelchel','rkshockey','tetondan','dustinmyers'];
+
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,8 +63,79 @@ const followersArray = [];
       </div>
     </div>
 */
+const cards = document.querySelector('.cards')
+function cardMaker(obj){
+  const card = document.createElement('div')
+  const cardImage = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const name = document.createElement('h3')
+  const username = document.createElement('p')
+  const location = document.createElement('p')
+  const profile = document.createElement('p')
+  const profileLink = document.createElement('a')
+  const followers = document.createElement('p')
+  const following = document.createElement('p')
+  const bio = document.createElement('p')
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  username.classList.add('username')
+  
+  cardImage.src = obj.data.avatar_url
+  name.textContent = obj.data.name
+  username.textContent = obj.data.login
+  location.textContent = `Location: ${obj.data.location}`
+  profileLink.src = obj.data.html_url
+  followers.innerHTML = `Followers: ${obj.data.followers}`
+  following.innerHTML = `Following: ${obj.data.following}`
+  
+  card.appendChild(cardImage)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(username)
+  cardInfo.appendChild(location)
+  cardInfo.appendChild(profile)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bio)
+  profile.appendChild(profileLink)
+  
+  return card
+}
 
-/*
+axios.get(`https://api.github.com/users/rdperry031`)
+  .then(obj => {
+   const card = cardMaker(obj)
+   cards.appendChild(card)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally( () => {
+    console.log('done')
+  })
+
+function followerCards(user){
+  axios.get(`https://api.github.com/users/${user}`)
+  .then(obj => {
+   const card = cardMaker(obj)
+   cards.appendChild(card)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally( () => {
+    console.log('done')
+  })
+}
+followersArray.forEach(item => {
+  followerCards(item)
+  })
+  
+
+
+  
+  /*
   List of LS Instructors Github username's:
     tetondan
     dustinmyers
